@@ -125,7 +125,7 @@
 ;;; |                                                Running Queries                                                 |
 ;;; +----------------------------------------------------------------------------------------------------------------+
 
-(def ^:private ^:const ^Integer query-timeout-seconds 60)
+(def ^:private ^:const ^Integer query-timeout-seconds 300)
 
 (defn do-with-finished-response
   "Impl for `with-finished-response`."

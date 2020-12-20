@@ -1,4 +1,38 @@
 # Metabase
+
+## Building custom image for Nansen
+
+```bash
+docker pull circleci/clojure:lein-2.8.1-node-browsers
+
+docker run -v /<PATH_TO_METABASE_REPO>/metabase:/metabase \
+  --name metabase-circle -d circleci/clojure:lein-2.8.1-node-browsers /bin/sh -c "while true; do ping 8.8.8.8; done"
+
+docker exec -it metabase-circle /bin/bash
+
+# Inside the container now
+
+cp -R /metabase /tmp/metabase
+cd /tmp/metabase
+lein with-profile +include-all-drivers deps
+
+export DRIVERS=bigquery,druid,google,googleanalytics,mongo,redshift,snowflake,sparksql,sqlite,sqlserver
+
+./bin/build version frontend drivers uberjar
+
+cp /tmp/metabase/target/uberjar/metabase.jar /metabase/bin/docker
+
+# Inside your local machine now
+
+cd /<PATH_TO_METABASE_REPO>/metabase:/metabase/bin/docker
+
+bash build_image.sh release v0.34.3-nansen2
+docker tag metabase/metabase:v0.34.3-nansen2 blockchainetl/metabase:v0.34.3-nansen2
+docker push blockchainetl/metabase:v0.34.3-nansen2
+```
+
+## Metabase
+
 Metabase is the easy, open source way for everyone in your company to ask questions and learn from data.
 
 ![Metabase Product Screenshot](docs/metabase-product-screenshot.png)
