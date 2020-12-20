@@ -2,6 +2,9 @@
 
 ## Building custom image for Nansen
 
+In the custom version we increased timeout for
+BigQuery driver from 60 seconds to 300 seconds https://github.com/metabase/metabase/issues/12003
+
 ```bash
 docker pull circleci/clojure:lein-2.8.1-node-browsers
 
