@@ -43,7 +43,7 @@ if [ "$BUILD_TYPE" == "release" ]; then
     echo "Building Docker image ${DOCKER_IMAGE} from official Metabase release ${MB_TAG}"
 
     # download the official version of Metabase which matches our tag
-    curl -L -f -o ${BASEDIR}/metabase.jar https://downloads.metabase.com/${MB_TAG}/metabase.jar
+    # curl -L -f -o ${BASEDIR}/metabase.jar https://downloads.metabase.com/${MB_TAG}/metabase.jar
 
     if [[ $? -ne 0 ]]; then
         echo "Download failed!"
@@ -75,29 +75,29 @@ docker build -t ${DOCKER_IMAGE} $BASEDIR
 # TODO: validate our built docker image
 
 
-if [ "$PUBLISH" == "YES" ]; then
-    echo "Publishing image ${DOCKER_IMAGE} to Dockerhub"
-
-    # make sure that we are logged into dockerhub
-    docker login --username="${DOCKERHUB_USERNAME}" --password="${DOCKERHUB_PASSWORD}"
-
-    # push the built image to dockerhub
-    docker push ${DOCKER_IMAGE}
-
-    # TODO: quick check against dockerhub to see that our new image made it
-
-    if [ "$LATEST" == "YES" ]; then
-        # tag our recent versioned image as "latest"
-        docker tag -f ${DOCKER_IMAGE} ${DOCKERHUB_NAMESPACE}/${DOCKERHUB_REPOSITORY}:latest
-
-        # then push it as well
-        docker push ${DOCKERHUB_NAMESPACE}/${DOCKERHUB_REPOSITORY}:latest
-
-        # TODO: validate push succeeded
-    fi
-fi
-
-# TODO: cleanup after ourselves and remove the Metabase binary we downloaded
-rm -f ${BASEDIR}/metabase.jar
+#if [ "$PUBLISH" == "YES" ]; then
+#    echo "Publishing image ${DOCKER_IMAGE} to Dockerhub"
+#
+#    # make sure that we are logged into dockerhub
+#    docker login --username="${DOCKERHUB_USERNAME}" --password="${DOCKERHUB_PASSWORD}"
+#
+#    # push the built image to dockerhub
+#    docker push ${DOCKER_IMAGE}
+#
+#    # TODO: quick check against dockerhub to see that our new image made it
+#
+#    if [ "$LATEST" == "YES" ]; then
+#        # tag our recent versioned image as "latest"
+#        docker tag -f ${DOCKER_IMAGE} ${DOCKERHUB_NAMESPACE}/${DOCKERHUB_REPOSITORY}:latest
+#
+#        # then push it as well
+#        docker push ${DOCKERHUB_NAMESPACE}/${DOCKERHUB_REPOSITORY}:latest
+#
+#        # TODO: validate push succeeded
+#    fi
+#fi
+#
+## TODO: cleanup after ourselves and remove the Metabase binary we downloaded
+#rm -f ${BASEDIR}/metabase.jar
 
 echo "Done"
