@@ -1,5 +1,39 @@
 # Metabase
 
+## Building custom image for Nansen
+
+In the custom version we increased timeout for
+BigQuery driver from 60 seconds to 300 seconds https://github.com/metabase/metabase/issues/12003
+
+```bash
+docker pull metabase/ci:2020-11-30
+
+docker run -v /Users/emedvedev/temp_projects/metabase:/metabase \
+  --name metabase-circle-2020-11-30 -d metabase/ci:2020-11-30 /bin/sh -c "while true; do ping 8.8.8.8; done"
+
+docker exec -it metabase-circle-2020-11-30 /bin/bash
+
+# Inside the container now
+
+cp -R /metabase /tmp/metabase
+cd /tmp/metabase
+lein with-profile +include-all-drivers deps
+
+export DRIVERS=bigquery,druid,google,googleanalytics
+
+./bin/build version frontend drivers uberjar
+
+cp /tmp/metabase/target/uberjar/metabase.jar /metabase/bin/docker
+
+# Inside your local machine now
+
+cd /<PATH_TO_METABASE_REPO>/metabase:/metabase/bin/docker
+
+bash build_image.sh release v0.37.7-nansen0
+docker tag metabase/metabase:v0.37.7-nansen0 blockchainetl/metabase:v0.37.7-nansen0
+docker push blockchainetl/metabase:v0.37.7-nansen0
+```
+
 Metabase is the easy, open source way for everyone in your company to ask questions and learn from data.
 
 ![Metabase Product Screenshot](docs/metabase-product-screenshot.png)
@@ -102,7 +136,7 @@ Metabase also allows you to hit our Query API directly from Javascript to integr
 
 # License
 
-This repository contains the source code for both the Open Source edition of Metabase, released under the AGPL, as well as the commercial edition of Metabase Enterprise, released under the Metabase Commercial Software License. 
+This repository contains the source code for both the Open Source edition of Metabase, released under the AGPL, as well as the commercial edition of Metabase Enterprise, released under the Metabase Commercial Software License.
 
 See [LICENSE.txt](./LICENSE.txt) for details.
 

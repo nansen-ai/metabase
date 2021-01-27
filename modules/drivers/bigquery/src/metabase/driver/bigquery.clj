@@ -142,7 +142,7 @@
 ;;; |                                                Running Queries                                                 |
 ;;; +----------------------------------------------------------------------------------------------------------------+
 
-(def ^:private ^:const ^Integer query-timeout-seconds 60)
+(def ^:private ^:const ^Integer query-timeout-seconds 300)
 
 (def ^:private ^:dynamic ^Long max-results-per-page
   "Maximum number of rows to return per page in a query."
