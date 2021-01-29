@@ -27,11 +27,11 @@ cp /tmp/metabase/target/uberjar/metabase.jar /metabase/bin/docker
 
 # Inside your local machine now
 
-cd /<PATH_TO_METABASE_REPO>/metabase:/metabase/bin/docker
+cd /<PATH_TO_METABASE_REPO>/metabase/bin/docker
 
-bash build_image.sh release v0.37.7-nansen0
-docker tag metabase/metabase:v0.37.7-nansen0 blockchainetl/metabase:v0.37.7-nansen0
-docker push blockchainetl/metabase:v0.37.7-nansen0
+bash build_image.sh release v0.37.7-nansen2
+docker tag metabase/metabase:v0.37.7-nansen2 blockchainetl/metabase:v0.37.7-nansen2
+docker push blockchainetl/metabase:v0.37.7-nansen2
 ```
 
 Metabase is the easy, open source way for everyone in your company to ask questions and learn from data.

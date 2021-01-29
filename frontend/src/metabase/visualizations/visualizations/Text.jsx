@@ -155,6 +155,7 @@ export default class Text extends Component {
                 styles["text-card-markdown"],
                 getSettingsStyle(settings),
               )}
+              linkTarget="_blank"
               source={settings.text}
             />
           ) : (
@@ -189,6 +190,7 @@ export default class Text extends Component {
               styles["text-card-markdown"],
               getSettingsStyle(settings),
             )}
+            linkTarget="_blank"
             source={settings.text}
           />
         </div>

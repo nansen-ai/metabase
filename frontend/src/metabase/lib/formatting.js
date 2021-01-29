@@ -669,7 +669,7 @@ export function formatValue(value: Value, options: FormattingOptions = {}) {
         value: formatted,
         raw: value,
       });
-      return <ReactMarkdown source={markdown} renderers={MARKDOWN_RENDERERS} />;
+      return <ReactMarkdown source={markdown} renderers={MARKDOWN_RENDERERS} linkTarget="_blank" />;
     } else {
       // FIXME: render and get the innerText?
       console.warn(
