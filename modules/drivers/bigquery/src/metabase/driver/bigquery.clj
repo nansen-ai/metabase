@@ -45,7 +45,7 @@
             (.setApplicationName google/application-name))))
 
 (def ^:private ^{:arglists '([database])} ^GoogleCredential database->credential
-  (partial google/database->credential (Collections/singleton BigqueryScopes/BIGQUERY)))
+  (partial google/database->credential [BigqueryScopes/BIGQUERY "https://www.googleapis.com/auth/drive.readonly"]))
 
 (def ^:private ^{:arglists '([database])} ^Bigquery database->client
   (comp credential->client database->credential))
@@ -204,6 +204,14 @@
                   (.setLocation location))]
     (google/execute request)))
 
+(defn nansen-load-balance-project-id [project-id]
+  (if (str/starts-with? project-id "nansen-prod-")
+    (let [project-id-index (Integer. (last (str/split project-id #"-")))
+          number-of-projects (+ project-id-index 1)]
+
+      (rand-nth (map #(str "nansen-prod-bq-metabase-" % "") (range number-of-projects))))
+    project-id))
+
 (defn- ^GetQueryResultsResponse execute-bigquery
   ([{{:keys [project-id]} :details, :as database} sql parameters]
    (execute-bigquery (database->client database) (find-project-id project-id (database->credential database)) sql parameters))
@@ -216,7 +224,8 @@
                    (.setUseLegacySql (str/includes? (str/lower-case sql) "#legacysql"))
                    (.setQuery sql)
                    (bigquery.params/set-parameters! parameters))
-         query-response ^QueryResponse (google/execute (.query (.jobs client) project-id request))
+         load-balanced-project-id (nansen-load-balance-project-id project-id)
+         query-response ^QueryResponse (google/execute (.query (.jobs client) load-balanced-project-id request))
          job-ref (.getJobReference query-response)
          location (.getLocation job-ref)
          job-id (.getJobId job-ref)

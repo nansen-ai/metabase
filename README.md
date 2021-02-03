@@ -19,7 +19,7 @@ cp -R /metabase /tmp/metabase
 cd /tmp/metabase
 lein with-profile +include-all-drivers deps
 
-export DRIVERS=bigquery,druid,google,googleanalytics
+export DRIVERS=bigquery,druid,google
 
 ./bin/build version frontend drivers uberjar
 
@@ -29,9 +29,9 @@ cp /tmp/metabase/target/uberjar/metabase.jar /metabase/bin/docker
 
 cd /<PATH_TO_METABASE_REPO>/metabase/bin/docker
 
-bash build_image.sh release v0.37.7-nansen2
-docker tag metabase/metabase:v0.37.7-nansen2 blockchainetl/metabase:v0.37.7-nansen2
-docker push blockchainetl/metabase:v0.37.7-nansen2
+bash build_image.sh release v0.37.7-nansen5
+docker tag metabase/metabase:v0.37.7-nansen5 blockchainetl/metabase:v0.37.7-nansen5
+docker push blockchainetl/metabase:v0.37.7-nansen5
 ```
 
 Metabase is the easy, open source way for everyone in your company to ask questions and learn from data.
